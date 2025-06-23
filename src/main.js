@@ -1,4 +1,5 @@
 import './style.css'
+import 'flyonui/flyonui.js';
 import { PathfindingSimulation } from './js/PathfindingSimulation.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
