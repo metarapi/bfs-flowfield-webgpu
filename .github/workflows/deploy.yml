@@ -32,6 +32,14 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+      - name: Add .nojekyll file
+        run: touch dist/.nojekyll
+      - name: Debug - Check what files exist
+        run: |
+          echo "=== Files in dist/assets ==="
+          ls -la dist/assets/
+          echo "=== Contents of index.html ==="
+          head -20 dist/index.html
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
