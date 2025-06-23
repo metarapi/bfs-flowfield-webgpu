@@ -4,6 +4,7 @@ import glsl from 'vite-plugin-glsl';
 import { resolve } from 'path';
 
 export default defineConfig({
+  base: '/BFS-Flowfield-webgpu/',  // Static base path - simple and works!
   plugins: [
     tailwindcss(),
     glsl(),
