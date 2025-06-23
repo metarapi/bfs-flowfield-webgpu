@@ -2,8 +2,8 @@
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 @plugin "flyonui";
 
-@plugin "tailwindcss-motion";
-@source "./node_modules/flyonui/dist/index.js";
+/* @plugin "tailwindcss-motion";
+@source "./node_modules/flyonui/dist/index.js"; */
 
 body {
   margin: 0;

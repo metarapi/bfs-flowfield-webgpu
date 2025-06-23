@@ -16,11 +16,13 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.10",
     "bootstrap-icons": "^1.13.1",
-    "compression": "^1.8.0",
-    "express": "^5.1.0",
     "flyonui": "^2.2.0",
-    "helmet": "^8.1.0",
     "tailwindcss": "^4.1.10",
     "tailwindcss-motion": "^1.1.1"
+  },
+  "optionalDependencies": {
+    "compression": "^1.8.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0"
   }
 }
