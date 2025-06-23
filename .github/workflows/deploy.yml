@@ -32,6 +32,12 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+      - name: Debug - List dist contents
+        run: |
+          echo "Contents of dist folder:"
+          find dist -type f -name "*.css" -o -name "*.js" -o -name "*.html"
+          echo "Contents of index.html:"
+          cat dist/index.html
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
