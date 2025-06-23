@@ -32,12 +32,24 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - name: Debug - List dist contents
+      - name: Debug - List ALL dist contents
         run: |
-          echo "Contents of dist folder:"
-          find dist -type f -name "*.css" -o -name "*.js" -o -name "*.html"
-          echo "Contents of index.html:"
+          echo "=== ALL FILES in dist folder ==="
+          find dist -type f | sort
+          echo ""
+          echo "=== Contents of index.html ==="
           cat dist/index.html
+          echo ""
+          echo "=== Directory structure ==="
+          ls -la dist/
+          if [ -d "dist/assets" ]; then
+            echo "=== Assets directory ==="
+            ls -la dist/assets/
+          fi
+          if [ -d "dist/src" ]; then
+            echo "=== Src directory ==="
+            find dist/src -type f
+          fi
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
