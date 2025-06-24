@@ -1,0 +1,42 @@
+<div id="webgpu-error-modal" class="overlay modal overlay-open:opacity-100 overlay-open:duration-300 modal-middle hidden" role="dialog" tabindex="-1">
+  <div class="modal-dialog overlay-open:opacity-100 overlay-open:duration-300">
+    <div class="modal-content bg-woodsmoke-900 text-sharklite-100">
+      <div class="modal-header bg-woodsmoke-900 border-b border-woodsmoke-700">
+        <h3 class="modal-title text-brink-pink-400 text-xl font-semibold">WebGPU Not Supported</h3>
+        <button type="button" class="btn btn-text btn-circle btn-sm absolute end-3 top-3 text-sharklite-300 hover:text-white" 
+                onclick="document.getElementById('webgpu-error-modal').classList.add('hidden')">
+          <span class="text-xl">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body bg-woodsmoke-900 py-6">
+        <div class="flex items-start gap-4">
+          <div class="text-brink-pink-400 text-3xl">
+            <i class="bi bi-exclamation-triangle"></i>
+          </div>
+          <div>
+            <p class="text-sharklite-200 mb-4">
+              Your browser does not support WebGPU, which is required to run this application.
+            </p>
+            <p class="text-sharklite-300 mb-4">
+              Please check the link below to see which browsers support WebGPU and how to enable it.
+            </p>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="inline-flex items-center gap-2 text-brink-pink-400 hover:text-brink-pink-300 underline">
+              <i class="bi bi-box-arrow-up-right"></i>
+              WebGPU Browser Support Information
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer bg-woodsmoke-900 border-t border-woodsmoke-700">
+        <button type="button" 
+                class="btn bg-woodsmoke-800 text-sharklite-200 hover:bg-woodsmoke-700 border-woodsmoke-600" 
+                onclick="document.getElementById('webgpu-error-modal').classList.add('hidden')">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

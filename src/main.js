@@ -1,8 +1,17 @@
 import './style.css'
+import "flyonui/flyonui"
 import { PathfindingSimulation } from './js/PathfindingSimulation.js';
+import { checkWebGPUSupport } from './js/initWebGPU.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        // Check WebGPU support before initializing anything
+        const isWebGPUSupported = await checkWebGPUSupport();
+        if (!isWebGPUSupported) {
+            console.error("WebGPU not supported, stopping initialization");
+            return; // Stop here if WebGPU isn't supported
+        }
+
         const simulation = new PathfindingSimulation({}, 32);
         
         const device = await simulation.initialize();
@@ -33,6 +42,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         
     } catch (error) {
         console.error("Error in main setup:", error);
+        
+        // Show error modal for any initialization errors
+        try {
+            const { loadHTMLPartial, showModal } = await import('./js/util.js');
+            await loadHTMLPartial('/src/partials/webgpuErrorModal.html');
+            showModal('webgpu-error-modal', {
+                title: 'Initialization Error',
+                body: `<p class="text-sharklite-200">An error occurred while initializing the application:</p>
+                       <p class="text-brink-pink-300 font-mono text-sm mt-2">${error.message}</p>`
+            });
+        } catch (modalError) {
+            alert(`Application Error: ${error.message}`);
+        }
     }
 });
 

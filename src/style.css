@@ -1,9 +1,8 @@
 @import "tailwindcss";
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 @plugin "flyonui";
+@import "flyonui/variants.css"; /* Correct import path for vite */
 @plugin "tailwindcss-motion";
-
-@source "./node_modules/flyonui/dist/index.js";
 
 body {
   margin: 0;
