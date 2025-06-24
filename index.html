@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BFS Flowfield WebGPU</title>
+  <script type="module" crossorigin src="/BFS-Flowfield-webgpu/assets/main-BKfFFoFs.js"></script>
+  <link rel="stylesheet" crossorigin href="/BFS-Flowfield-webgpu/assets/main-C5BDbDRl.css">
+</head>
+
+<body class="h-screen flex flex-col bg-woodsmoke-950">
+
+  <nav class="navbar bg-shark-950 text-sharklite-100 p-4 shadow-md border-b border-brink-pink-800">
+    <div class="w-full flex items-center justify-between px-4 relative">
+      <!-- Title (Center) -->
+      <div class="absolute left-1/2 transform -translate-x-1/2">
+        <span class="text-xl font-semibold whitespace-nowrap text-brink-pink-400">WebGPU Flowfields</span>
+      </div>
+      <!-- Empty div for left spacing -->
+      <div></div>
+      <!-- GitHub Icon (Right) -->
+      <div>
+        <a href="https://github.com/metarapi/bfs-flowfield-webgpu"
+          class="text-sharklite-300 hover:text-white transition-colors p-2" target="_blank" rel="noopener noreferrer">
+          <i class="bi bi-github text-2xl"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-area flex-1 bg-sharklite-950">
+    <div class="grid grid-cols-18 gap-2 h-full p-2">
+
+      <!-- Controls Sidebar -->
+      <aside class="col-span-3 flex flex-col bg-woodsmoke-900 border border-woodsmoke-800 rounded p-4 h-full">
+        <h3 class="text-sharklite-200 text-lg font-semibold mb-4 flex items-center gap-2">
+          <i class="bi bi-sliders"></i> Controls
+        </h3>
+        <select
+          class="select select-bordered bg-woodsmoke-800 text-sharklite-100 border-woodsmoke-700 mb-3 focus:outline-none focus:ring-2 focus:ring-brink-pink-400 focus:border-brink-pink-400 rounded-xs"
+          id="drawingMode">
+          <option value="traversable" selected>Traversable</option>
+          <option value="obstacle">Obstacle</option>
+          <option value="difficult">Difficult Terrain</option>
+          <option value="source">Source/Goal</option>
+        </select>
+        <button class="btn btn-text text-feijoa-400 hover:bg-feijoa-300/20 mb-3 rounded-xs" id="startBtn">
+          <i class="bi bi-play-fill"></i>
+          Start Calculation
+        </button>
+        <button class="btn btn-text text-spray-300 hover:bg-spray-300/20 mb-3 rounded-xs" id="mazeBtn">
+          <i class="bi bi-qr-code"></i>
+          Hilbert Curve
+        </button>
+
+        <button class="btn btn-text text-brink-pink-400 hover:bg-brink-pink-400/20 mb-3 rounded-xs" id="resetBtn">
+          <i class="bi bi-arrow-clockwise"></i>
+          Reset All
+        </button>
+
+        <div class="flex items-center justify-center gap-3 mb-4">
+          <label class="relative inline-block">
+            <input id="relaxationToggle" type="checkbox"
+              class="switch switch-outline checked:border-goldenrod-300 checked:text-goldenrod-300 peer"
+              aria-label="outline switch with icon" checked />
+            <span class="icon-[tabler--check] absolute start-1 top-1.5 hidden size-4 peer-checked:block"></span>
+            <span class="icon-[tabler--x] text-neutral absolute end-1 top-1.5 block size-4 peer-checked:hidden"></span>
+          </label>
+          <span id="relaxationText" class="text-goldenrod-300">Relaxation</span>
+        </div>
+
+        <div class="flex items-center gap-3 mb-3 btn-text justify-center">
+          <i class="bi bi-speedometer hover:motion-preset-seesaw hover:motion-loop-once text-sharklite-200"></i>
+          <label for="speedRange" class="text-sharklite-200 justify-center">Speed</label>
+        </div>
+
+        <input id="speedRange" type="range" class="range range-sm hover:[--range-color:white] hover:bg-sharklite-800" aria-label="range" />
+        <div class="w-full flex justify-between text-xs px-2 mt-1">
+          <span>Slow</span>
+          <span>Fast</span>
+        </div>
+      </aside>
+
+      <!-- Obstacle Map -->
+      <section class="col-span-5 flex flex-col h-full items-center">
+        <h2 class="text-sharklite-200 text-xl font-semibold mb-2 flex items-center gap-2 justify-center">
+          <i class="bi bi-map"></i> Obstacle Map
+        </h2>
+        <div class="w-full">
+          <div class="aspect-square w-full bg-woodsmoke-800  border border-woodsmoke-700 overflow-hidden">
+            <canvas id="obstacleCanvas" class="w-full h-full cursor-crosshair" width="512" height="512"
+              style="width:100%; height:100%;"></canvas>
+          </div>
+        </div>
+        <div class="text-xs text-sharklite-400 bg-woodsmoke-800 m-2 p-2  border border-woodsmoke-700">
+          <i class="bi bi-mouse2-fill"></i>
+          Left click to draw
+        </div>
+
+      </section>
+
+      <!-- Distance Field -->
+      <section class="col-span-5 flex flex-col h-full items-center">
+        <h2 id="distanceFieldHeader"
+          class="text-sharklite-200 text-xl font-semibold mb-2 flex items-center gap-2 justify-center">
+          <i class="bi bi-bullseye"></i> Integration Field
+        </h2>
+        <div class="w-full">
+          <div class="aspect-square w-full bg-woodsmoke-800  border border-woodsmoke-700 overflow-hidden">
+            <canvas id="distanceCanvas" class="w-full h-full cursor-crosshair" width="512" height="512"
+              style="width:100%; height:100%;"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Flow Field -->
+      <section class="col-span-5 flex flex-col h-full items-center">
+        <h2 id="flowfieldHeader"
+          class="text-sharklite-200 text-xl font-semibold mb-2 flex items-center gap-2 justify-center">
+          <i class="bi bi-arrows-move"></i> Flow Field
+        </h2>
+        <div class="w-full">
+          <div class="aspect-square w-full bg-woodsmoke-800  border border-woodsmoke-700 overflow-hidden">
+            <canvas id="flowfieldCanvas" class="w-full h-full cursor-crosshair" width="512" height="512"
+              style="width:100%; height:100%;"></canvas>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="./node_modules/flyonui/flyonui.js"></script>
+
+
+</body>
+
+</html>
