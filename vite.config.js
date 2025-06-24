@@ -11,10 +11,23 @@ export default defineConfig({
   ],
   build: {
     outDir: 'dist',
-    assetsInlineLimit: 0,
+    assetsInlineLimit: 0, // Keep assets as separate files
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html')
+        main: resolve(__dirname, 'index.html'),
+      },
+      output: {
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name.split('.');
+          const extType = info[info.length - 1];
+          if (/wgsl/.test(extType)) {
+            return 'src/shaders/[name][extname]';
+          }
+          if (/csv/.test(extType)) {
+            return 'src/assets/[name][extname]';
+          }
+          return 'assets/[name]-[hash][extname]';
+        }
       }
     }
   },
