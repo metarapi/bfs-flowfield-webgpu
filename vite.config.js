@@ -4,7 +4,7 @@ import glsl from 'vite-plugin-glsl';
 import { resolve } from 'path';
 
 export default defineConfig({
-  base: '/BFS-Flowfield-webgpu/',
+  base: '/bfs-flowfield-webgpu/',
   plugins: [
     tailwindcss(),
     glsl(),
